@@ -75,6 +75,9 @@ $nombre_usuario = $_SESSION['usuario'];
                 Gestión de Proveedores
             </a>
 
+<a href="listar_clientes.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10">
+                Gestión de Clientes
+            </a>
 
 
             <a href="reportes.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10">

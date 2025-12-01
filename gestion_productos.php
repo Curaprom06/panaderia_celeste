@@ -1,5 +1,5 @@
 <?php
-// gestion_productos.php
+//  gestion_productos.php
 
 session_start();
 require_once 'conexion.php'; 

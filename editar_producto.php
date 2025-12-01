@@ -1,5 +1,5 @@
 <?php
-// editar_producto.php
+//  editar_producto.php
 
 session_start();
 require_once 'conexion.php'; 
