@@ -1,5 +1,5 @@
 <?php
-//  cambiar_estado_producto.php
+// cambiar_estado_producto.php
 
 session_start();
 require_once 'conexion.php'; 

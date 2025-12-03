@@ -1,5 +1,5 @@
 <?php
-//  crear_producto.php
+// crear_producto.php
 
 session_start();
 require_once 'conexion.php'; 

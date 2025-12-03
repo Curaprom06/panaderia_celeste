@@ -53,7 +53,8 @@ $nombre_usuario = htmlspecialchars($_SESSION['nombre'] ?? 'Usuario');
                 <span class="text-3xl font-bold block">Iniciar Punto de Venta (PDV)</span>
                 <span class="text-sm block mt-1">Registrar ventas rápidamente</span>
             </a>
-            
+
+                    
             <a href="logout.php" 
                class="block w-full bg-red-500 text-white py-3 rounded-lg shadow hover:bg-red-600 transition duration-300 mt-6">
                 Cerrar Sesión

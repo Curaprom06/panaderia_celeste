@@ -1,5 +1,5 @@
 <?php
-//  gestion_productos.php
+// gestion_productos.php
 
 session_start();
 require_once 'conexion.php'; 
@@ -95,9 +95,17 @@ $sql_productos = "
                 <h2 class="text-3xl font-semibold text-[var(--color-primary)]">
                     Listado de Productos
                 </h2>
-                <a href="crear_producto.php" class="bg-[var(--color-primary)] text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition duration-150">
+                   
+                
+                <a href="gestion_categorias.php" class="bg-[var(--color-secondary)] text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition duration-150">
+                    + Añadir Categoría
+                </a>
+
+                 <a href="crear_producto.php" class="bg-[var(--color-primary)] text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition duration-150">
                     + Añadir Producto
                 </a>
+
+
             </div>
 
             <div class="bg-white p-4 rounded-lg shadow-md overflow-x-auto">
