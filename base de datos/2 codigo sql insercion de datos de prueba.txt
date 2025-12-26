@@ -1,0 +1,48 @@
+USE panaderia_celeste;
+
+-- 1. Inserción de datos en la tabla CATEGORIA
+INSERT INTO categoria (nombre_categoria, descripcion) VALUES
+('Pan Salado', 'Panes para el día a día (baguettes, campesinos, etc.)'),
+('Pastelería', 'Productos dulces como pasteles, tartas y postres'),
+('Pan Dulce', 'Panes de bollería y hojaldre'),
+('Bebidas', 'Cafés, jugos y otras bebidas frías/calientes');
+
+-- 2. Inserción de datos en la tabla USUARIO
+-- ¡Contraseñas establecidas: '123456' para ambos!
+INSERT INTO usuario (nombre, apellido, usuario, contraseña, rol, estado) VALUES
+('Jonathan', 'Sandoval', 'admin', '123456', 'Administrador', 'Activo'),
+('Maria', 'Gomez', 'vendedor1', '123456', 'Empleado', 'Activo');
+
+-- 3. Inserción de datos en la tabla CLIENTE
+INSERT INTO cliente (nombre, apellido, telefono, email, direccion, fecha_registro) VALUES
+('Andrea', 'Lopez', '3104567890', 'andrea@ejemplo.com', 'Calle 10 # 5-20', CURDATE());
+
+-- 4. Inserción de datos en la tabla PRODUCTO
+INSERT INTO producto (nombre, descripcion, precio, stock, unidad_medida, fecha_registro, id_categoria) VALUES
+('Pan Campesino', 'Pan artesanal grande.', 4.50, 50, 'Unidad', CURDATE(), 1),
+('Tarta de Fresa', 'Porción individual.', 3.00, 20, 'Unidad', CURDATE(), 2),
+('Croissant', 'Pan de hojaldre clásico.', 1.80, 80, 'Unidad', CURDATE(), 3),
+('Café Americano', 'Taza mediana.', 2.50, 999, 'Taza', CURDATE(), 4);
+
+
+-- 5. SIMULACIÓN DE UNA VENTA
+
+-- 5a. Insertar la cabecera de la VENTA
+INSERT INTO venta (fecha, total, id_cliente, id_usuario) VALUES
+(NOW(), 0.00, 1, 2);
+
+SET @last_venta_id = LAST_INSERT_ID();
+
+-- 5b. Insertar los detalles de la VENTA
+INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario, subtotal) VALUES
+(@last_venta_id, 1, 2, 4.50, 9.00), -- 2 * Pan Campesino
+(@last_venta_id, 2, 1, 3.00, 3.00);  -- 1 * Tarta de Fresa
+
+-- 5c. Actualizar el TOTAL de la VENTA
+UPDATE venta
+SET total = 12.00
+WHERE id_venta = @last_venta_id;
+
+-- 5d. Actualizar el STOCK de los productos vendidos
+UPDATE producto SET stock = stock - 2 WHERE id_producto = 1;
+UPDATE producto SET stock = stock - 1 WHERE id_producto = 2;

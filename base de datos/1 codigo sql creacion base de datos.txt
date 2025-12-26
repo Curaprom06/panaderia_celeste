@@ -1,0 +1,115 @@
+-- 1. CREACIÓN DE LA BASE DE DATOS
+CREATE DATABASE IF NOT EXISTS panaderia_celeste;
+USE panaderia_celeste;
+
+-- 2. CREACIÓN DE LA TABLA CATEGORIA
+CREATE TABLE categoria (
+    id_categoria INT NOT NULL AUTO_INCREMENT,
+    nombre_categoria VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(150),
+    PRIMARY KEY (id_categoria)
+);
+
+-- 3. CREACIÓN DE LA TABLA PRODUCTO
+CREATE TABLE producto (
+    id_producto INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion VARCHAR(255),
+    precio DECIMAL(10, 2) NOT NULL,
+    stock INT NOT NULL DEFAULT 0,
+    unidad_medida VARCHAR(20),
+    fecha_registro DATE,
+    id_categoria INT NOT NULL,
+    PRIMARY KEY (id_producto),
+    FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
+);
+
+-- 4. CREACIÓN DE LA TABLA CLIENTE
+CREATE TABLE cliente (
+    id_cliente INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50),
+    telefono VARCHAR(20),
+    email VARCHAR(100),
+    direccion VARCHAR(150),
+    fecha_registro DATE,
+    PRIMARY KEY (id_cliente)
+);
+
+-- 5. CREACIÓN DE LA TABLA USUARIO
+-- Se define el 'rol' como ENUM para restringir a los roles definidos (Admin/Empleado, basado en RF 7 y CU)
+CREATE TABLE usuario (
+    id_usuario INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50),
+    usuario VARCHAR(50) NOT NULL UNIQUE,
+    contraseña VARCHAR(255) NOT NULL, -- Usar VARCHAR(255) para almacenar un hash seguro
+    rol ENUM('Administrador', 'Empleado', 'Cliente') NOT NULL,
+    estado ENUM('Activo', 'Inactivo') NOT NULL,
+    dui VARCHAR(20), -- Agregado 'dui' (identificación) según el diagrama
+    PRIMARY KEY (id_usuario)
+);
+
+-- 6. CREACIÓN DE LA TABLA VENTA (o Pedido)
+-- Esta tabla registra la cabecera de la venta.
+CREATE TABLE venta (
+    id_venta INT NOT NULL AUTO_INCREMENT,
+    fecha DATETIME NOT NULL,
+    total DECIMAL(10, 2) NOT NULL,
+    id_cliente INT, -- Permite ventas a clientes no registrados (NULL)
+    id_usuario INT NOT NULL, -- Vendedor que registró la venta
+    PRIMARY KEY (id_venta),
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+-- 7. CREACIÓN DE LA TABLA DETALLE_VENTA
+-- Esta tabla registra los productos y cantidades de cada venta.
+CREATE TABLE detalle_venta (
+    id_detalle INT NOT NULL AUTO_INCREMENT,
+    id_venta INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10, 2) NOT NULL,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (id_detalle),
+    FOREIGN KEY (id_venta) REFERENCES venta(id_venta),
+    FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
+);
+
+-- 8. CREACIÓN DE LA TABLA PROVEEDOR
+CREATE TABLE proveedor (
+    id_proveedor INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20),
+    email VARCHAR(20),
+    direccion VARCHAR(150),
+    PRIMARY KEY (id_proveedor)
+);
+
+-- 9. CREACIÓN DE LA TABLA COMPRA
+-- Esta tabla registra la cabecera de la compra a proveedores (reposición de inventario).
+CREATE TABLE compra (
+    id_compra INT NOT NULL AUTO_INCREMENT,
+    fecha DATETIME NOT NULL,
+    total DECIMAL(10, 2) NOT NULL,
+    id_proveedor INT NOT NULL,
+    id_usuario INT NOT NULL, -- Usuario (Admin) que realiza la compra
+    PRIMARY KEY (id_compra),
+    FOREIGN KEY (id_proveedor) REFERENCES proveedor(id_proveedor),
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+-- 10. CREACIÓN DE LA TABLA DETALLE_COMPRA
+-- Esta tabla registra los productos y cantidades de cada compra.
+CREATE TABLE detalle_compra (
+    id_detalle INT NOT NULL AUTO_INCREMENT,
+    id_compra INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10, 2) NOT NULL,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (id_detalle),
+    FOREIGN KEY (id_compra) REFERENCES compra(id_compra),
+    FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
+);
